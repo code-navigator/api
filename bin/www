@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+// Load environment variables
+const config = require('./../config')
+
+// Module dependencies
+const app = require('../app');
+
+// Start up server
+app.listen(
+  process.env.PORT || '3000', 
+  () => console.log('Server is running')
+)
