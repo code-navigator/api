@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const async = require('async')
 
 const aircraft = require('./../models/aircraft')
 const customer = require('./../models/customer')
@@ -9,46 +10,59 @@ const poType = require('./../models/poType')
 const prime = require('./../models/prime')
 const shipMethod = require('./../models/shipMethod')
 
-/* GET Home page */
-router.get('/', function(req, res) {
-  res.send('Running Server')
+const filters = require('./../classes/filters')
+
+
+let session = new filters()
+
+
+/* GET list of PO Filters */
+router.get('/filterlists', (req, res) => {
+  async.parallel ({
+
+    aircrafts: function(callback) {
+      aircraft.findAll({ attributes: ['name'] })
+        .then(aircrafts => callback(null, aircrafts))
+    },
+    customers: function(callback) {
+      customer.findAll({ attributes: ['name'] })
+        .then(customers => callback(null, customers))
+    },
+    dpasRatings: function(callback) {
+      dpasRating.findAll({ attributes: ['name'] })
+        .then(dpasRatings => callback(null, dpasRatings))
+    },
+    poTypes: function(callback) {
+      poType.findAll({ attributes: ['name'] })
+        .then(poTypes => callback(null, poTypes))
+    },
+    primes: function(callback) {
+      prime.findAll({ attributes: ['name'] })
+        .then(primes => callback(null, primes))
+    },
+    shipMethods: function(callback) {
+      shipMethod.findAll({ attributes: ['name'] })
+        .then(shipMethods => callback(null, shipMethods))
+    }
+  },
+  function (err, results) {
+    res.send({
+      aircrafts: results.aircrafts,
+      customers: results.customers,
+      dpasRatings: results.dpasRatings,
+      primes: results.primes,
+      shipMethods: results.shipMethods,
+      poTypes: results.poTypes,
+    })
+  })
 })
 
-
-/* GET data requests */
-router.get('/aircrafts', function(req, res) {
-  aircraft.findAll()
-    .then(aircrafts => res.send(aircrafts))
-})
-
-router.get('/customers', function(req, res) {
-  customer.findAll()
-    .then(customers => res.send(customers))
-})
-
-router.get('/dpasRatings', function(req, res) {
-  dpasRating.findAll()
-    .then(dpasRatings => res.send(dpasRatings))
-})
-
-router.get('/poNotes', function(req, res) {
-  poNote.findAll()
-    .then(poNotes => res.send(poNotes))
-})
-
-router.get('/poTypes', function(req, res) {
-  poType.findAll()
-    .then(poTypes => res.send(poTypes))
-})
-
-router.get('/primes', function(req, res) {
-  prime.findAll()
-    .then(primes => res.send(primes))
-})
-
-router.get('/shipMethods', function(req, res) {
-  shipMethod.findAll()
-    .then(shipMethods => res.send(shipMethods))
+router.post('/poNotes', (req, res) => {
+  session.copyFrom(req.body)
+  var obj = {}
+  session.copyTo(obj)
+  console.log(obj)
+  res.send('test')
 })
 
 module.exports = router;
