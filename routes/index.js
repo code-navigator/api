@@ -66,3 +66,26 @@ router.post('/poNotes', (req, res) => {
 })
 
 module.exports = router;
+
+
+// poNotes: function (callback) {
+//   poNote.findAll({order: [['IndexNo', 'ASC']]})
+//   .then(poNotes =>
+//     callback(null, poNotes
+//       .filter((poNote, index, array) => {
+//         return poNote.type &&
+//           session.poType &&
+//           (poNote.type.trim() === '' ||
+//             (poNote.type.includes(session.getPoTypeFilter()) &&
+//               session.parseFilter(poNote.filter)))
+//       })
+//       .filter((poNote, index, array) => {
+//         return (poNote.type.trim() !== '') || (poNote.type.trim() === '' && array[index + 1].type.trim() !== '')
+//       })
+//       .map(poNote => {
+//         poNote.text = session.filterText(poNote.text) + '\n\n'
+//         return poNote
+//       })
+//     )
+//   )
+// }
