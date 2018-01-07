@@ -1,4 +1,4 @@
-const connection = require('./../data/connection').cygnus
+const connection = require('./../connection').cygnus
 const Sequelize = require('sequelize')
 
 const PoNote = connection.define('poNotes', {

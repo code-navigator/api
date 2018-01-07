@@ -2,46 +2,46 @@ const express = require('express');
 const router = express.Router();
 const async = require('async')
 
-const aircraft = require('./../models/aircraft')
-const customer = require('./../models/customer')
-const dpasRating = require('./../models/dpasRating')
-const poNote = require('./../models/poNote')
-const poType = require('./../models/poType')
-const prime = require('./../models/prime')
-const shipMethod = require('./../models/shipMethod')
+const aircraft = require('./../data/models/aircraft')
+const customer = require('./../data/models/customer')
+const dpasRating = require('./../data/models/dpasRating')
+const poNote = require('./../data/models/poNote')
+const poType = require('./../data/models/poType')
+const prime = require('./../data/models/prime')
+const shipMethod = require('./../data/models/shipMethod')
 
 const filters = require('./../classes/filters')
 
 
 let session = new filters()
 
-
 /* GET list of PO Filters */
 router.get('/filterlists', (req, res) => {
   async.parallel ({
 
     aircrafts: function(callback) {
-      aircraft.findAll({ attributes: ['name'] })
-        .then(aircrafts => callback(null, aircrafts))
+      aircraft.listOfNames()
+      .then(aircrafts => callback(null, aircrafts))
     },
+
     customers: function(callback) {
-      customer.findAll({ attributes: ['name'] })
+      customer.listOfNames()
         .then(customers => callback(null, customers))
     },
     dpasRatings: function(callback) {
-      dpasRating.findAll({ attributes: ['name'] })
+      dpasRating.listOfNames()
         .then(dpasRatings => callback(null, dpasRatings))
     },
     poTypes: function(callback) {
-      poType.findAll({ attributes: ['name'] })
+      poType.listOfNames()
         .then(poTypes => callback(null, poTypes))
     },
     primes: function(callback) {
-      prime.findAll({ attributes: ['name'] })
+      prime.listOfNames()
         .then(primes => callback(null, primes))
     },
     shipMethods: function(callback) {
-      shipMethod.findAll({ attributes: ['name'] })
+      shipMethod.listOfNames()
         .then(shipMethods => callback(null, shipMethods))
     }
   },
@@ -57,16 +57,35 @@ router.get('/filterlists', (req, res) => {
   })
 })
 
-router.post('/poNotes', (req, res) => {
-  session.copyFrom(req.body)
-  var obj = {}
-  session.copyTo(obj)
-  console.log(obj)
-  res.send('test')
+router.get('/ponotes', (req, res) => {
+  poNote.findAll({order: [['IndexNo', 'ASC']]})
+    .then(poNotes => poNotes
+      .filter((poNote, index, array) => {
+        console.log(session.poType)
+        return poNote.type &&
+          session.poType &&
+          (poNote.type.trim() === '' ||
+            (poNote.type.includes(session.getPoTypeFilter()) &&
+              session.parseFilter(poNote.filter)))
+      })
+      .filter((poNote, index, array) => {
+        return (poNote.type.trim() !== '') || 
+          (poNote.type.trim() === '' && 
+            array[index + 1].type.trim() !== '')
+      })
+      .map(poNote => {
+        poNote.text = session.filterText(poNote.text) + '\n\n'
+        return poNote
+      })
+    )
+    .then(poNotes => {
+      res.send(poNotes.map(poNote => {
+        return poNote.text
+      })
+      .join('')
+      )
+    })
 })
-
-module.exports = router;
-
 
 // poNotes: function (callback) {
 //   poNote.findAll({order: [['IndexNo', 'ASC']]})
@@ -89,3 +108,15 @@ module.exports = router;
 //     )
 //   )
 // }
+
+router.post('/ponotes', (req, res) => {
+  session.copyFrom(req.body)
+  console.log(req.body)
+  var obj = {}
+  session.copyTo(obj)
+  res.send(session.poType)
+})
+
+module.exports = router;
+
+
