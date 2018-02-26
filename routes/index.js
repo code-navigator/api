@@ -9,6 +9,7 @@ const poNote = require('./../data/models/poNote')
 const poType = require('./../data/models/poType')
 const prime = require('./../data/models/prime')
 const shipMethod = require('./../data/models/shipMethod')
+const requirement = require('./../data/models/requirement')
 
 const filters = require('./../classes/filters')
 
@@ -61,7 +62,6 @@ router.get('/ponotes', (req, res) => {
   poNote.findAll({order: [['IndexNo', 'ASC']]})
     .then(poNotes => poNotes
       .filter((poNote, index, array) => {
-        console.log(session.poType)
         return poNote.type &&
           session.poType &&
           (poNote.type.trim() === '' ||
@@ -87,34 +87,19 @@ router.get('/ponotes', (req, res) => {
     })
 })
 
-// poNotes: function (callback) {
-//   poNote.findAll({order: [['IndexNo', 'ASC']]})
-//   .then(poNotes =>
-//     callback(null, poNotes
-//       .filter((poNote, index, array) => {
-//         return poNote.type &&
-//           session.poType &&
-//           (poNote.type.trim() === '' ||
-//             (poNote.type.includes(session.getPoTypeFilter()) &&
-//               session.parseFilter(poNote.filter)))
-//       })
-//       .filter((poNote, index, array) => {
-//         return (poNote.type.trim() !== '') || (poNote.type.trim() === '' && array[index + 1].type.trim() !== '')
-//       })
-//       .map(poNote => {
-//         poNote.text = session.filterText(poNote.text) + '\n\n'
-//         return poNote
-//       })
-//     )
-//   )
-// }
-
 router.post('/ponotes', (req, res) => {
   session.copyFrom(req.body)
-  console.log(req.body)
   var obj = {}
   session.copyTo(obj)
   res.send(session.poType)
+})
+
+router.get('/requirements', (req, res) => {
+  var id = req.query.id
+  
+  requirement.findById(id).then(requirements => {
+    res.send(requirements)
+  })
 })
 
 module.exports = router;
