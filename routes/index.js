@@ -102,6 +102,11 @@ router.get('/requirements', (req, res) => {
   })
 })
 
+router.put('/requirements/:id', (req, res) => {
+  requirement.updateById(req.params.id)
+  res.send('success')
+})
+
 module.exports = router;
 
 
