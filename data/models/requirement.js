@@ -2,7 +2,7 @@ const connection = require('./../connection').cygnus
 const Sequelize = require('sequelize')
 
 const Requirement = connection.define('requirement', {
-  node_id: Sequelize.INTEGER,
+  node_id: Sequelize.BIGINT,
   node_order: Sequelize.INTEGER,
   description: Sequelize.STRING,
   requirement: Sequelize.TEXT
