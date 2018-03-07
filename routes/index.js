@@ -103,7 +103,7 @@ router.get('/requirements', (req, res) => {
 })
 
 router.put('/requirements', (req, res) => {
-  console.log(req.body)
+  requirement.updateById(req.body)
   // requirement.updateById(1, req.body)
   // res.send('success')
 })

@@ -20,17 +20,18 @@ Requirement.findById = (id) => {
   return table
 }
 
-Requirement.updateById = (id) => {
-  Requirement.update(
-    { description: 'Testing' },
-    { where: { id: id } }
-  )
-    .then(result =>
-      console.log("success")
+Requirement.updateById = (items) => {
+  items.forEach( (item) => {
+    Requirement.update(
+      { description: item.description,
+        requirement: item.requirement,
+        node_order: item.node_order
+      },
+      {
+        where: { id: item.id }
+      }
     )
-    .catch(err =>
-      console.log("error")
-    )
+  })    
 }
 
 module.exports = Requirement
