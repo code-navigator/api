@@ -2,7 +2,8 @@ const connection = require('./../connection').cygnus
 const Sequelize = require('sequelize')
 
 const Requirement = connection.define('requirement', {
-  node_id: Sequelize.BIGINT,
+  id: {type: Sequelize.STRING, primaryKey: true},
+  node_id: Sequelize.STRING,
   node_order: Sequelize.INTEGER,
   description: Sequelize.STRING,
   requirement: Sequelize.TEXT
@@ -16,22 +17,26 @@ Requirement.findById = (id) => {
       }
     }
   )
-  
   return table
 }
 
 Requirement.updateById = (items) => {
   items.forEach( (item) => {
-    Requirement.update(
-      { description: item.description,
+    Requirement.upsert(
+      { id: item.id,
+        node_id: item.node_id,
+        description: item.description,
         requirement: item.requirement,
         node_order: item.node_order
-      },
-      {
-        where: { id: item.id }
       }
     )
   })    
+}
+
+Requirement.deleteById = (id) => {
+  Requirement.destroy({
+    where: { id: id }
+  })
 }
 
 module.exports = Requirement

@@ -108,6 +108,10 @@ router.put('/requirements', (req, res) => {
   // res.send('success')
 })
 
+router.delete('/requirements/:id', (req, res) => {
+  requirement.deleteById(req.params.id)
+})
+
 module.exports = router;
 
 
