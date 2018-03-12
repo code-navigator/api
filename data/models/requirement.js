@@ -21,6 +21,8 @@ Requirement.findById = (id) => {
 }
 
 Requirement.updateById = (items) => {
+  console.log(items);
+  
   items.forEach( (item) => {
     Requirement.upsert(
       { id: item.id,
