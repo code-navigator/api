@@ -35,9 +35,11 @@ Requirement.updateById = (items) => {
   })    
 }
 
-Requirement.deleteById = (id) => {
-  Requirement.destroy({
-    where: { id: id }
+Requirement.delete = (items) => {
+  items.forEach((item) => {
+    Requirement.destroy({
+      where: { id: item.id }
+    })
   })
 }
 

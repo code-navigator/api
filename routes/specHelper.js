@@ -15,8 +15,8 @@ router.put("/requirements", (req, res) => {
 });
 
 // Delete requirement having ID
-router.delete("/requirements/:id", (req, res) => {
-  requirement.deleteById(req.params.id);
+router.delete("/requirements", (req, res) => {
+  requirement.deleteById(req.body);
 });
 
 module.exports = router;
