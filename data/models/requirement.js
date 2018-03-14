@@ -21,8 +21,6 @@ Requirement.findById = (id) => {
 }
 
 Requirement.updateById = (items) => {
-  console.log(items);
-  
   items.forEach( (item) => {
     Requirement.upsert(
       { id: item.id,
@@ -36,7 +34,7 @@ Requirement.updateById = (items) => {
 }
 
 Requirement.delete = (items) => {
-  items.forEach((item) => {
+  items.forEach( (item) => {
     Requirement.destroy({
       where: { id: item.id }
     })
