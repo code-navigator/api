@@ -18,7 +18,8 @@ SpecNode.fetchNodes = () => {
       parentId: row.parentId,
       title: row.title,
       open: false,
-      readOnly: true
+      readOnly: true,
+      children:[]
     }
   })
 
