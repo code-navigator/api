@@ -11,8 +11,7 @@ const SpecNode = connection.define('specNode', {
 
 SpecNode.fetchNodes = () => {
   var table = SpecNode.findAll()
-
-  nodeArray = table.map(row => {
+  .map(row => {
     return {
       id: row.id,
       parentId: row.parentId,
@@ -23,7 +22,26 @@ SpecNode.fetchNodes = () => {
     }
   })
 
-  return nodeArray
+  return table
+}
+
+SpecNode.updateById = (items) => {
+  items.forEach( (item) => {
+    SpecNode.upsert(
+      { id: item.id,
+        parentId: item.parentId,
+        title: item.title
+      }
+    )
+  })    
+}
+
+SpecNode.delete = (items) => {
+  items.forEach( (item) => {
+    SpecNode.destroy({
+      where: { id: item.id }
+    })
+  })
 }
 
 module.exports = SpecNode

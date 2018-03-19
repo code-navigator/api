@@ -6,9 +6,19 @@ const express = require("express"),
 
 router.get("/nodes", (req, res) => {
   specNode.fetchNodes()
-    .then ( node => {
-      res.send(getNestedChildren(node, "0"))
+    .then ( nodes => {
+      res.send(getNestedChildren(nodes, "0"))
   })
+})
+
+// Update nodes in payload
+router.put("/nodes", (req, res) => {
+  specNodes.updateById(req.body);
+})
+
+// Delete nodes having ID
+router.delete("/nodes", (req, res) => {
+  specNodes.delete(req.body);
 })
 
 //  Load requirements for current node ID
@@ -21,11 +31,11 @@ router.get("/requirements", (req, res) => {
 // Update requirements in payload
 router.put("/requirements", (req, res) => {
   requirement.updateById(req.body);
-});
+})
 
 // Delete requirement having ID
 router.delete("/requirements", (req, res) => {
   requirement.delete(req.body);
-});
+})
 
 module.exports = router;
