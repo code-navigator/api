@@ -1,11 +1,12 @@
 const express = require("express"),
   router = express.Router(),
   requirement = require("./../data/models/requirement"),
-  specNode = require("./../data/models/specNode"),
-  { getNestedChildren } = require("./../classes/common")
+  specNodes = require("./../data/models/specNode"),
+  { getNestedChildren } = require("./../classes/common"),
+  { getFlatten } = require("./../classes/common")
 
 router.get("/nodes", (req, res) => {
-  specNode.fetchNodes()
+  specNodes.fetchNodes()
     .then ( nodes => {
       res.send(getNestedChildren(nodes, "0"))
   })
@@ -13,12 +14,13 @@ router.get("/nodes", (req, res) => {
 
 // Update nodes in payload
 router.put("/nodes", (req, res) => {
-  specNodes.updateById(req.body);
+  var flattenedArray = getFlatten(req.body)
+  specNodes.updateById(flattenedArray)
 })
 
 // Delete nodes having ID
 router.delete("/nodes", (req, res) => {
-  specNodes.delete(req.body);
+  specNodes.delete(getFlatten(req.body))
 })
 
 //  Load requirements for current node ID

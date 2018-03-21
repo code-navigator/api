@@ -15,22 +15,20 @@ function getNestedChildren(flatArray, parent) {
     return nestedArray 
 }
 
-function flattenChildren(tree) {
-    let flatten = [Object.assign({}, tree)];
-    delete flatten[0][key];
-  
-    if (tree[key] && tree[key].length > 0) {
-      return flatten.concat(tree[key]
-        .map((child)=>flattenTree(child, key))
-        .reduce((a, b)=>a.concat(b), [])
-      );
-    }
-
-    return flatten
-  };
+function getFlatten(tree) {
+    const array = Array.isArray(tree) ? tree : [tree];
+    return array.reduce(function(acc, value) {
+      acc.push(value);
+      if (value.children) {
+        acc = acc.concat(getFlatten(value.children));
+        delete value.children;
+      }
+      return acc;
+    }, []);
+  }
 
 
 module.exports = {
     getNestedChildren: getNestedChildren,
-    flattenChildren: flattenChildren
+    getFlatten: getFlatten
 }
