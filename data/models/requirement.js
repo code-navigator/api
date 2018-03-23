@@ -41,4 +41,12 @@ Requirement.delete = (items) => {
   })
 }
 
+Requirement.deleteByNodeId = (items) => {
+  items.forEach( (item) => {
+    Requirement.destroy({
+      where: {node_id: item.id}
+    })
+  })
+}
+
 module.exports = Requirement
