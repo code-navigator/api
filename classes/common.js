@@ -27,8 +27,20 @@ function getFlatten(tree) {
     }, []);
   }
 
+function getDaysFromToday(date) {
+    var today = new Date()
+    var date = new Date(date + 'PST')
+    var millisecondsPerDay = 24*60*60*1000
+    
+    return Math.round(
+        Math.abs(
+        (date.getTime() - today.getTime())/millisecondsPerDay
+        )
+    )
+}
 
 module.exports = {
     getNestedChildren: getNestedChildren,
-    getFlatten: getFlatten
+    getFlatten: getFlatten,
+    getDaysFromToday: getDaysFromToday
 }

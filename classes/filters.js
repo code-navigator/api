@@ -1,3 +1,5 @@
+const { getDaysFromToday } = require("./common")
+
 const DPASRATING_FILTER = 'M'
 const SHIPMETHOD_FILTER = 'S'
 const DAYSTILCOMPLETION_FILTER = 'D'
@@ -47,7 +49,12 @@ class Filters {
     return this.shipMethod ? SHIPMETHOD_FILTER : ''
   }
 
+  getReturnDateFilter() {
+    return this.returnDate ? DAYSTILCOMPLETION_FILTER : ''
+  }
+
   getDaysTilCompletionFilter () {
+    this.daysTilCompletion = getDaysFromToday(this.returnDate) + ' DAYS'
     return this.daysTilCompletion ? DAYSTILCOMPLETION_FILTER : ''
   }
 
@@ -80,6 +87,7 @@ class Filters {
   getAllFilters () {
     return this.getDpasRatingFilter() +
       this.getShipMethodFilter() +
+      this.getReturnDateFilter() +
       this.getDaysTilCompletionFilter() +
       this.getQuoteRefFilter() +
       this.getMaterialSpecFilter() +
