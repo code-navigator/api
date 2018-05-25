@@ -83,7 +83,7 @@ router.get("/ponotes", (req, res) => {
           ) 
         })
         .map(poNote => {
-          poNote.text = session.filterText(poNote.text) + "\n\n" 
+          poNote.text = session.filterText(poNote.text) + "\r\n\r\n" 
           return poNote 
         })
     )
