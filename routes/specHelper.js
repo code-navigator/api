@@ -5,8 +5,10 @@ const express = require("express"),
   { getNestedChildren } = require("./../classes/common"),
   { getFlatten } = require("./../classes/common")
 
+
+// Fetch nodes
 router.get("/nodes", (req, res) => {
-  specNodes.fetchNodes()
+  specNodes.fetch()
     .then ( nodes => {
       res.send(getNestedChildren(nodes, "0"))
   })
@@ -15,29 +17,24 @@ router.get("/nodes", (req, res) => {
 // Update nodes in payload
 router.put("/nodes", (req, res) => {
   var flattenedArray = getFlatten(req.body)
-  specNodes.updateById(flattenedArray)
+  specNodes.update(flattenedArray)
+  requirement.update(flattenedArray)
   res.status(204).end()
 })
 
 // Delete nodes having ID
 router.delete("/nodes", (req, res) => {
-  var flat = getFlatten(req.body)
-  specNodes.delete(flat)
-  requirement.deleteByNodeId(flat)
+  var flattenedArray = getFlatten(req.body)
+  specNodes.delete(flattenedArray)
+  requirement.deleteByNodeId(flattenedArray)
   res.status(204).end()
 })
 
-//  Load requirements for current node ID
+//  Fetch requirements for current node ID
 router.get("/requirements", (req, res) => {
-  requirement.findById(req.query.id).then(requirements => {
+  requirement.fetch(req.query.id).then(requirements => {
     res.send(requirements);
   })
-})
-
-// Update requirements in payload
-router.put("/requirements", (req, res) => {
-  requirement.updateById(req.body);
-  res.status(204).end()
 })
 
 // Delete requirement having ID
