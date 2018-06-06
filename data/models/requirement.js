@@ -9,7 +9,7 @@ const Requirement = connection.define('requirement', {
   requirement: Sequelize.TEXT
 })
 
-Requirement.findById = (id) => {
+Requirement.fetch = (id) => {
   var table = Requirement.findAll(
     { 
       where: {
@@ -20,16 +20,18 @@ Requirement.findById = (id) => {
   return table
 }
 
-Requirement.updateById = (items) => {
+Requirement.update = (items) => {
   items.forEach( (item) => {
-    Requirement.upsert(
-      { id: item.id,
-        node_id: item.node_id,
-        description: item.description,
-        requirement: item.requirement,
-        node_order: item.node_order
-      }
-    )
+    item.requirements.forEach( (requirement) => {
+      Requirement.upsert(
+        { id: requirement.id,
+          node_id: requirement.node_id,
+          description: requirement.description,
+          requirement: requirement.requirement,
+          node_order: requirement.node_order
+        }
+      )
+    })
   })    
 }
 

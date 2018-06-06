@@ -9,7 +9,7 @@ const SpecNode = connection.define('specNode', {
   readOnly: Sequelize.BOOLEAN
 })
 
-SpecNode.fetchNodes = () => {
+SpecNode.fetch = () => {
   var table = SpecNode.findAll()
   .map(row => {
     return {
@@ -18,14 +18,15 @@ SpecNode.fetchNodes = () => {
       title: row.title,
       open: false,
       readOnly: true,
-      children:[]
+      children:[],
+      requirements: []
     }
   })
 
   return table
 }
 
-SpecNode.updateById = (items) => {
+SpecNode.update = (items) => {
   items.forEach( (item) => {
     SpecNode.upsert(
       { id: item.id,
