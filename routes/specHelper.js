@@ -5,7 +5,6 @@ const express = require("express"),
   { getNestedChildren } = require("./../classes/common"),
   { getFlatten } = require("./../classes/common")
 
-
 // Fetch nodes
 router.get("/nodes", (req, res) => {
   specNodes.fetch()

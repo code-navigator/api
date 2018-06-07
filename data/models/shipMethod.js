@@ -5,7 +5,7 @@ const ShipMethod = connection.define('shipMethod', {
   name: Sequelize.STRING
 })
 
-ShipMethod.listOfNames = () => {
+ShipMethod.fetch = () => {
   var table = ShipMethod.findAll()
 
   var listOfNames = table.map(row => {

@@ -6,7 +6,7 @@ const PoType = connection.define('poTypes', {
   name: Sequelize.STRING
 })
 
-PoType.listOfNames = () => {
+PoType.fetch = () => {
   var table = PoType.findAll()
 
   var listOfNames = table.map(row => {

@@ -19,32 +19,32 @@ router.get("/filterlists", (req, res) => {
     {
       aircrafts: function(callback) {
         aircraft
-          .listOfNames()
+          .fetch()
           .then(aircrafts => callback(null, aircrafts)) 
       },
       customers: function(callback) {
         customer
-          .listOfNames()
+          .fetch()
           .then(customers => callback(null, customers)) 
       },
       dpasRatings: function(callback) {
         dpasRating
-          .listOfNames()
+          .fetch()
           .then(dpasRatings => callback(null, dpasRatings)) 
       },
       poTypes: function(callback) {
         poType
-          .listOfNames()
+          .fetch()
           .then(poTypes => callback(null, poTypes)) 
       },
       primes: function(callback) {
         prime
-          .listOfNames()
+          .fetch()
           .then(primes => callback(null, primes)) 
       },
       shipMethods: function(callback) {
         shipMethod
-          .listOfNames()
+          .fetch()
           .then(shipMethods => callback(null, shipMethods)) 
       }
     },

@@ -5,7 +5,7 @@ const DpasRating = connection.define('dpasRating', {
   name: Sequelize.STRING
 })
 
-DpasRating.listOfNames = () => {
+DpasRating.fetch = () => {
   var table = DpasRating.findAll()
 
   var listOfNames = table.map(row => {

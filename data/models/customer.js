@@ -7,7 +7,7 @@ const Customer = connection.define('customer', {
 
 Customer.prototype.customerFilter = 'Boeing'
 
-Customer.listOfNames = () => {
+Customer.fetch = () => {
   var table = Customer.findAll()
 
   var listOfNames = table.map(row => {

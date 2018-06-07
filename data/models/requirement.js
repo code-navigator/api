@@ -3,8 +3,8 @@ const Sequelize = require('sequelize')
 
 const Requirement = connection.define('requirement', {
   id: {type: Sequelize.STRING, primaryKey: true},
-  node_id: Sequelize.STRING,
-  node_order: Sequelize.INTEGER,
+  nodeId: Sequelize.STRING,
+  nodeOrder: Sequelize.INTEGER,
   description: Sequelize.STRING,
   requirement: Sequelize.TEXT
 })
@@ -13,7 +13,7 @@ Requirement.fetch = (id) => {
   var table = Requirement.findAll(
     { 
       where: {
-        node_id: id
+        nodeId: id
       }
     }
   )
@@ -22,13 +22,14 @@ Requirement.fetch = (id) => {
 
 Requirement.update = (items) => {
   items.forEach( (item) => {
+    console.log(item.requirements)
     item.requirements.forEach( (requirement) => {
       Requirement.upsert(
         { id: requirement.id,
-          node_id: requirement.node_id,
+          nodeId: requirement.nodeId,
           description: requirement.description,
           requirement: requirement.requirement,
-          node_order: requirement.node_order
+          nodeOrder: requirement.nodeOrder
         }
       )
     })
@@ -46,7 +47,7 @@ Requirement.delete = (items) => {
 Requirement.deleteByNodeId = (items) => {
   items.forEach( (item) => {
     Requirement.destroy({
-      where: {node_id: item.id}
+      where: {nodeId: item.id}
     })
   })
 }

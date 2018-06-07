@@ -5,7 +5,7 @@ const Prime = connection.define('prime', {
   name: Sequelize.STRING
 })
 
-Prime.listOfNames = () => {
+Prime.fetch = () => {
   var table = Prime.findAll()
 
   var listOfNames = table.map(row => {
