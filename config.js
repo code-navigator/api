@@ -5,10 +5,21 @@ var config = {
   // host: 'localhost',
   // db: 'Cygnus'
   // mssql connection settings (work)
-  user: 'sa',
-  password: 'N@4u2C0k!',
-  host: 'SQ03',
-  db: 'Cygnus'
+  visualDb: {
+    user: 'sa',
+    password: 'N@4u2C0k!',
+    host: 'SQ03',
+    db: 'Cygnus'
+  },
+  fileboundDb: {
+    user: 'FBADMIN',
+    password: 'filebound',
+    host: 'DM01',
+    db: 'Filebound',
+  },
+  paths: {
+    filebound: '\\\\Dm01\\e$\\FILEBOUND REPOSITORY\\'
+  }
 }
 
 module.exports = config

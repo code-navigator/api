@@ -39,8 +39,15 @@ function getDaysFromToday(date) {
     )
 }
 
+function padLeft(expression, length, fillChar) {
+    var padding = fillChar.repeat(length)
+    var paddedExpr = String(padding + expression).slice(-1 * length)
+    return paddedExpr
+}
+
 module.exports = {
     getNestedChildren: getNestedChildren,
     getFlatten: getFlatten,
-    getDaysFromToday: getDaysFromToday
+    getDaysFromToday: getDaysFromToday,
+    padLeft: padLeft
 }

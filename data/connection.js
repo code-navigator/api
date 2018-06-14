@@ -5,11 +5,11 @@ const config = require('./../config')
 const connection = {
   cygnus: new Sequelize(
     'Cygnus',
-    config.user,
-    config.password,
+    config.visualDb.user,
+    config.visualDb.password,
     {
       logging: false,             // Disable logging
-      host: config.host,
+      host: config.visualDb.host,
       dialect: 'mssql',
       pool: {
         max: 5,
@@ -25,11 +25,32 @@ const connection = {
 
   visual: new Sequelize(
     'VELIVE',
-    config.user,
-    config.password,
+    config.visualDb.user,
+    config.visualDb.password,
     {
       logging: false,             // Disable logging
-      host: config.host,
+      host: config.visualDb.host,
+      dialect: 'mssql',
+      pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+      },
+      define: {
+        timestamps: false,
+        freezeTableName: true
+      },
+      operatorsAliases: false
+    }
+  ),
+
+  filebound: new Sequelize(
+    'Filebound',
+    config.fileboundDb.user,
+    config.fileboundDb.password,
+    {
+      logging: false,             // Disable logging
+      host: config.fileboundDb.host,
       dialect: 'mssql',
       pool: {
         max: 5,
