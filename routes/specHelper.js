@@ -22,14 +22,15 @@ router.get("/test.pdf", (req, res) => {
   var directory
 
   file.fetch(req.query.title)
-    .then(result => {
-      fileId = result[0].documents[0].documentId
-      fileName = fileId + '.PDF'
-      directory = padLeft((fileId / 1000 | 0) * 1000, 8, '0')
-      res.sendFile(fileName, {
-        root: config.paths.filebound + '\\' + directory + '\\'
-      })
-    })
+    // .then(result => {
+    //   fileId = result[0].documents[0].documentId
+    //   fileName = fileId + '.PDF'
+    //   directory = padLeft((fileId / 1000 | 0) * 1000, 8, '0')
+    //   console.log(fileName)
+    //   res.sendFile(fileName, {
+    //     root: config.paths.filebound + '\\' + directory + '\\'
+    //   })
+    // })
 })
 
 // Update nodes in payload
