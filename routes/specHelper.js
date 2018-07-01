@@ -6,7 +6,8 @@ const express = require("express"),
   config = require('./../config'),
   { getNestedChildren } = require("./../classes/common"),
   { getFlatten } = require("./../classes/common"),
-  { padLeft } = require("./../classes/common")
+  { padLeft } = require("./../classes/common"),
+  spawn = require('child_process').spawn
 
 // Fetch nodes
 router.get("/nodes", (req, res) => {
@@ -17,11 +18,28 @@ router.get("/nodes", (req, res) => {
 })
 
 router.get("/test.pdf", (req, res) => {
-  var fileId
-  var filename
-  var directory
+  var data = []
+  var cp = spawn('python.exe', ['c:\\test\\unoconv.py', '--stdout', '-f', 'pdf', '1000.xlsx'])
 
-  file.fetch(req.query.title)
+    cp.stdout.on('data', function(chunk){
+      data.push(chunk);
+    })
+
+    cp.stderr.on("data", function(data) {
+      console.error(data.toString());
+    });
+
+    cp.stdout.on('end', function(){
+      data = Buffer.concat(data);
+      // console.log(data.toString())
+      res.end(data)
+      //res.download(__dirname, 'test.pdf');
+    })
+  // var fileId
+  // var filename
+  // var directory
+
+  // file.fetch(req.query.title)
     // .then(result => {
     //   fileId = result[0].documents[0].documentId
     //   fileName = fileId + '.PDF'
