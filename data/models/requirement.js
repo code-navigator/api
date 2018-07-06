@@ -22,7 +22,6 @@ Requirement.fetch = (id) => {
 
 Requirement.update = (items) => {
   items.forEach( (item) => {
-    console.log(item.requirements)
     item.requirements.forEach( (requirement) => {
       Requirement.upsert(
         { id: requirement.id,

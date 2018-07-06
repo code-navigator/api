@@ -7,7 +7,7 @@ const express = require("express"),
   { getNestedChildren } = require("./../classes/common"),
   { getFlatten } = require("./../classes/common"),
   { padLeft } = require("./../classes/common"),
-  spawn = require('child_process').spawn
+  { spawn } = require('child_process')
 
 // Fetch nodes
 router.get("/nodes", (req, res) => {
@@ -17,25 +17,69 @@ router.get("/nodes", (req, res) => {
   })
 })
 
-router.get("/test.pdf", (req, res) => {
-  var data = []
-  var cp = spawn('python.exe', ['c:\\test\\unoconv.py', '--stdout', '-f', 'pdf', '1000.xlsx'])
+router.get("/loadspecs", async(req, res) => {
+  let file = await fetchSpec(req.query.title)
+  res.send(file.fileName)
+})
 
-    cp.stdout.on('data', function(chunk){
-      data.push(chunk);
+router.get("/loadspecs/:file", (req, res) => {
+  let fileName = req.params.file
+  let fileId = (fileName.replace(/\.[^/.]+$/, ""))
+  let directory = config.paths.filebound
+    + padLeft((fileId / 1000 | 0) * 1000, 8, '0') 
+    + '\\'
+  
+  res.sendFile(fileName, {
+    root: directory
+  })
+})
+
+router.get("/loadprocs", async(req, res) => {
+  // var data = []
+  // var file = fetchFile(req.query.title)
+  let file = await fetchProc(req.query.title)
+  res.send(file.fileName)
+  // var file = {
+  //   fileName: '137552',
+  //   extension: 'pdf',
+  //   directory: config.paths.filebound + '\\00137000\\',  //'00137000'
+  //   path: config.paths.filebound + '\\00137000\\' + "137552" + '.' + 'pdf' //'00137000\\' + "137586" + '.' + 'doc'
+  // }
+  //console.log(file)
+
+
+  // if (file && file.extension !== 'PDF') {
+  //   var cp = spawn(
+  //     'python.exe',
+  //     [
+  //       'c:\\test\\unoconv.py', 
+  //       '--stdout', 
+  //       '-f', 
+  //       'pdf', 
+  //       file.path
+  //     ]
+  //   )
+
+  //   cp.stdout.on('data', function(chunk){
+  //     data.push(chunk);
+  //   })
+
+  //   cp.stderr.on("data", function(data) {
+  //     console.error(data.toString());
+  //   });
+
+  //   cp.stdout.on('end', function(){
+  //     data = Buffer.concat(data);
+  //     res.end(data)
+  //   })
+
+  // } else {
+    res.sendFile(file.fileName, {
+      root: file.directory
     })
+  // }
 
-    cp.stderr.on("data", function(data) {
-      console.error(data.toString());
-    });
-
-    cp.stdout.on('end', function(){
-      data = Buffer.concat(data);
-      // console.log(data.toString())
-      res.end(data)
-      //res.download(__dirname, 'test.pdf');
-    })
-  // var fileId
+     // var fileId
   // var filename
   // var directory
 
@@ -49,6 +93,18 @@ router.get("/test.pdf", (req, res) => {
     //     root: config.paths.filebound + '\\' + directory + '\\'
     //   })
     // })
+})
+
+router.get("/loadprocs/:file", (req, res) => {
+  let fileName = req.params.file
+  let fileId = (fileName.replace(/\.[^/.]+$/, ""))
+  let directory = config.paths.filebound
+    + padLeft((fileId / 1000 | 0) * 1000, 8, '0') 
+    + '\\'
+  
+  res.sendFile(fileName, {
+    root: directory
+  })
 })
 
 // Update nodes in payload
@@ -79,5 +135,49 @@ router.delete("/requirements", (req, res) => {
   requirement.delete(req.body);
   res.status(204).end()
 })
+
+fetchSpec = async (title) => {
+  var fileName,
+    directory,
+    extension,
+    path
+  var result = await file.fetchSpec(title)
+  if (result) {
+    fileName = result[0].DocumentID 
+    directory = config.paths.filebound + padLeft((fileName / 1000 | 0) * 1000, 8, '0')
+    extension = result[0].Extension
+    fileName = fileName + '.' + extension
+    path = directory + '\\' + fileName
+    var result =  {
+      directory: directory,
+      fileName: fileName,
+      extension: extension,
+      path: path
+    }
+    return result
+  }
+}
+  
+  fetchProc = async (title) => {
+    var fileName,
+      directory,
+      extension,
+      path
+    var result = await file.fetchProc(title)
+    if (result) {
+      fileName = result[0].DocumentID 
+      directory = config.paths.filebound + padLeft((fileName / 1000 | 0) * 1000, 8, '0')
+      extension = result[0].Extension
+      fileName = fileName + '.' + extension
+      path = directory + '\\' + fileName
+      var result =  {
+        directory: directory,
+        fileName: fileName,
+        extension: extension,
+        path: path
+      }
+      return result
+    }
+  }
 
 module.exports = router;

@@ -13,22 +13,8 @@ const File = connection.define('files', {
 
 File.hasMany(Document, {foreignKey: 'fileId'})
 
-File.fetch = (title) => {
-  // table = File.findAll(
-  //   { 
-  //     where: {
-  //       field1: title,
-  //       projectId: SPEC_PROJECT_ID
-  //     },
-  //     include: [{
-  //       model: Document,
-  //       where: {
-  //         dividerName: SPEC_DIVIDER_NAME
-  //       }
-  //     }]
-  //   }
-  // )
-  connection.query(
+File.fetchSpec = (title) => {
+  return connection.query(
     `SELECT * FROM files
      INNER JOIN documents on files.fileId = documents.fileId
      WHERE replace(field1, ' ', '') = :title`,
@@ -37,10 +23,18 @@ File.fetch = (title) => {
       type: connection.QueryTypes.SELECT
     }
   )
-  .then(files => {
-    console.log(files)
-    return files
-  })
+}
+
+File.fetchProc = (title) => {
+  return connection.query(
+    `SELECT * FROM files
+     INNER JOIN documents on files.fileId = documents.fileId
+     WHERE replace(field3, ' ', '') = :title`,
+    {
+      replacements: {title: title.replace(' ', '')},
+      type: connection.QueryTypes.SELECT
+    }
+  )
 }
 
 module.exports = File
