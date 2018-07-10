@@ -1,13 +1,13 @@
 const express = require("express"),
-  router = express.Router(),
-  requirement = require("./../data/models/requirement"),
-  specNodes = require("./../data/models/specNode"),
-  file = require("./../data/models/file"),
   config = require('./../config'),
-  { getNestedChildren } = require("./../classes/common"),
-  { getFlatten } = require("./../classes/common"),
+  file = require("./../data/models/file"),
+  requirement = require("./../data/models/requirement"),
+  router = express.Router(),
+  specNodes = require("./../data/models/specNode"),
+  { spawn } = require('child_process'),
   { padLeft } = require("./../classes/common"),
-  { spawn } = require('child_process')
+  { getNestedChildren } = require("./../classes/common"),
+  { getFlatten } = require("./../classes/common")
 
 // Fetch nodes
 router.get("/nodes", (req, res) => {
