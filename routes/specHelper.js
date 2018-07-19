@@ -1,4 +1,5 @@
 const express = require("express"),
+  buildRequirements = require("./../classes/buildRequirements"),
   config = require('./../config'),
   file = require("./../data/models/file"),
   requirement = require("./../data/models/requirement"),
@@ -11,7 +12,7 @@ const express = require("express"),
 
 // Fetch nodes
 router.get("/nodes", (req, res) => {
-  specNodes.fetch()
+  specNodes.fetchAll()
     .then ( nodes => {
       res.send(getNestedChildren(nodes, "0"))
   })
@@ -39,60 +40,6 @@ router.get("/loadprocs", async(req, res) => {
   // var file = fetchFile(req.query.title)
   let file = await fetchProc(req.query.title)
   res.send(file.fileName)
-  // var file = {
-  //   fileName: '137552',
-  //   extension: 'pdf',
-  //   directory: config.paths.filebound + '\\00137000\\',  //'00137000'
-  //   path: config.paths.filebound + '\\00137000\\' + "137552" + '.' + 'pdf' //'00137000\\' + "137586" + '.' + 'doc'
-  // }
-  //console.log(file)
-
-
-  // if (file && file.extension !== 'PDF') {
-  //   var cp = spawn(
-  //     'python.exe',
-  //     [
-  //       'c:\\test\\unoconv.py', 
-  //       '--stdout', 
-  //       '-f', 
-  //       'pdf', 
-  //       file.path
-  //     ]
-  //   )
-
-  //   cp.stdout.on('data', function(chunk){
-  //     data.push(chunk);
-  //   })
-
-  //   cp.stderr.on("data", function(data) {
-  //     console.error(data.toString());
-  //   });
-
-  //   cp.stdout.on('end', function(){
-  //     data = Buffer.concat(data);
-  //     res.end(data)
-  //   })
-
-  // } else {
-    res.sendFile(file.fileName, {
-      root: file.directory
-    })
-  // }
-
-     // var fileId
-  // var filename
-  // var directory
-
-  // file.fetch(req.query.title)
-    // .then(result => {
-    //   fileId = result[0].documents[0].documentId
-    //   fileName = fileId + '.PDF'
-    //   directory = padLeft((fileId / 1000 | 0) * 1000, 8, '0')
-    //   console.log(fileName)
-    //   res.sendFile(fileName, {
-    //     root: config.paths.filebound + '\\' + directory + '\\'
-    //   })
-    // })
 })
 
 router.get("/loadprocs/:file", (req, res) => {
@@ -128,6 +75,13 @@ router.get("/requirements", (req, res) => {
   requirement.fetch(req.query.id).then(requirements => {
     res.send(requirements);
   })
+})
+
+router.get("/requirements/all", async(req, res) => {
+  let obj = new buildRequirements(req.query.id)
+  const a = await obj.getRequirements()
+  console.log(a)
+    res.send('TEST')
 })
 
 // Delete requirement having ID

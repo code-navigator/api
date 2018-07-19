@@ -9,7 +9,30 @@ const SpecNode = connection.define('specNode', {
   readOnly: Sequelize.BOOLEAN
 })
 
-SpecNode.fetch = () => {
+SpecNode.fetch = (id) => {
+  var table = SpecNode.findAll(
+    { 
+      where: {
+        id: id
+      }
+    }
+  )
+  .map(row => {
+    return {
+      id: row.id,
+      parentId: row.parentId,
+      title: row.title,
+      open: false,
+      readOnly: true,
+      children:[],
+      requirements: []
+    }
+  })
+  
+  return table
+}
+
+SpecNode.fetchAll = () => {
   var table = SpecNode.findAll()
   .map(row => {
     return {

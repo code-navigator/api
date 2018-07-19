@@ -1,4 +1,4 @@
-const connection = require('./../connection').cygnus
+const connection = require('../connection').cygnus
 const Sequelize = require('sequelize')
 
 const Requirement = connection.define('requirement', {
@@ -14,9 +14,20 @@ Requirement.fetch = (id) => {
     { 
       where: {
         nodeId: id
-      }
+      },
+      order: [['nodeOrder', 'ASC']]
     }
   )
+  .map(row => {
+    return {
+      id: row.id,
+      nodeId: row.nodeId,
+      nodeOrder: row.nodeOrder,
+      description: row.description,
+      requirement: row.requirement
+    }
+  })
+
   return table
 }
 
