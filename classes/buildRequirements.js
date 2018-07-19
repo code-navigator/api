@@ -38,9 +38,9 @@ class BuildRequirements {
     this.parentId = this.node.parentId
     
     if(this.parentId !== '0') {
-      this.getRequirements()
+      return await this.getRequirements()
     } else {
-      return 'test'
+      return this.requirements
     }
   }
 }

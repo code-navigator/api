@@ -79,9 +79,9 @@ router.get("/requirements", (req, res) => {
 
 router.get("/requirements/all", async(req, res) => {
   let obj = new buildRequirements(req.query.id)
-  const a = await obj.getRequirements()
-  console.log(a)
-    res.send('TEST')
+  obj.getRequirements().then(requirements => {
+    res.send(requirements)
+  })
 })
 
 // Delete requirement having ID
