@@ -13,7 +13,7 @@ class BuildRequirements {
   addHeading() {
     this.requirements.push(
       {
-        id: '0',
+        id: 'H-' + this.order,
         nodeId: this.id,
         nodeOrder: this.order++,
         description: 'Heading',
